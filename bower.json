@@ -1,0 +1,22 @@
+{
+  "name": "mock-fetch",
+  "version": "1.0.0",
+  "description": "Mocking library for Fetch",
+  "license": "BSD",
+  "keywords": [
+    "fetch"
+  ],
+  "authors": [
+    "Benoit Perrot"
+  ],
+  "homepage": "https://github.com/BenoitPerrot/mock-fetch",
+  "main": "mock-fetch.js",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
