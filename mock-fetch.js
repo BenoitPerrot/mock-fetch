@@ -35,6 +35,11 @@
         return this;
       }
 
+      clear() {
+        this.expectations = [];
+        return this;
+      }
+
       fetch(input, init) {
         const matchingExpectation = this.expectations.find(expectation => {
           // TODO: support other format of "input"
@@ -61,6 +66,7 @@
         return unique.fetch(input, init)
       }
       fetch.expect = (urlPattern, expectedResponse) => unique.expect(urlPattern, expectedResponse);
+      fetch.clearExpectations = () => unique.clear();
 
       return fetch;
     } ());
