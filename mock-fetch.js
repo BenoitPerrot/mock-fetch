@@ -10,6 +10,9 @@
       constructor(expectedResponse) {
         this.expectedJson = expectedResponse.json || JSON.parse(expectedResponse.text);
         this.expectedText = expectedResponse.text || JSON.stringify(expectedResponse.json);
+        this.expectedStatus = expectedResponse.status || 200;
+        this.expectedStatusText = expectedResponse.statusText || "OK";
+        this.expectedOK = 200 <= this.expectedStatus && this.expectedStatus < 300;
       }
 
       json() {
@@ -18,6 +21,18 @@
 
       text() {
         return Promise.resolve(this.expectedText);
+      }
+
+      status() {
+        return this.expectedStatus;
+      }
+
+      statusText() {
+        return this.expectedStatusText;
+      }
+
+      ok() {
+        return this.expectedOK;
       }
     }
 
