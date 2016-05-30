@@ -23,15 +23,15 @@
         return Promise.resolve(this.expectedText);
       }
 
-      status() {
+      get status() {
         return this.expectedStatus;
       }
 
-      statusText() {
+      get statusText() {
         return this.expectedStatusText;
       }
 
-      ok() {
+      get ok() {
         return this.expectedOK;
       }
     }
