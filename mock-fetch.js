@@ -8,19 +8,19 @@
 
     class Response {
       constructor(expectedResponse) {
-        this.expectedJson = expectedResponse.json || JSON.parse(expectedResponse.text);
-        this.expectedText = expectedResponse.text || JSON.stringify(expectedResponse.json);
+        this.expectedJson = expectedResponse.json;
+        this.expectedText = expectedResponse.text;
         this.expectedStatus = expectedResponse.status || 200;
         this.expectedStatusText = expectedResponse.statusText || "OK";
         this.expectedOK = 200 <= this.expectedStatus && this.expectedStatus < 300;
       }
 
       json() {
-        return Promise.resolve(this.expectedJson);
+        return Promise.resolve(this.expectedJson || JSON.parse(expectedResponse.text));
       }
 
       text() {
-        return Promise.resolve(this.expectedText);
+        return Promise.resolve(this.expectedText || JSON.stringify(expectedResponse.json));
       }
 
       get status() {
@@ -41,11 +41,10 @@
         this.expectations = [];
       }
 
-      expect(urlPattern, expectedResponse) {
+      expect(request, expectedResponse) {
         this.expectations.push({
-          urlPattern: urlPattern,
-          initPattern: {},
-          response: new Response(expectedResponse)
+          request: ((typeof request === 'string' || request instanceof RegExp) ? { url: request } : request),
+          response: new Response(expectedResponse),
         });
         return this;
       }
@@ -56,11 +55,11 @@
       }
 
       fetch(input, init) {
+        init = init || {};
         const matchingExpectation = this.expectations.find(expectation => {
-          // TODO: support other format of "input"
-          if (input.match(expectation.urlPattern)) {
-            // TODO: match init against initPattern
-            return true;
+          if (input.match(expectation.request.url)) {
+            return !expectation.request ||
+                   ['method', 'body'].every((k) => expectation.request[k] === init[k]);
           }
           return false;
         });
@@ -80,7 +79,7 @@
       function fetch(input, init) {
         return unique.fetch(input, init)
       }
-      fetch.expect = (urlPattern, expectedResponse) => unique.expect(urlPattern, expectedResponse);
+      fetch.expect = unique.expect.bind(unique);
       fetch.clearExpectations = () => unique.clear();
 
       return fetch;
