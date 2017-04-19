@@ -28,4 +28,15 @@ at a location preceding the use of the mock:
 
 ```html
 <script src="/bower_components/mock-fetch/mock-fetch.js"></script>
+<script>
+  // Setup the expectations
+
+  // for requests to any url ending with .json we will return {"msg": "Wow"}
+  fetch.expect(/.+\.json$/, { json: { msg: 'Wow' } });
+  
+  // for requests to http://example.org/qotd we will respond with the text "Insert witty remark here"
+  fetch.expect(/^http:\/\/example.org\/quotd/, { text: 'Insert witty remark here' });
+  // for requests to any other url, we will return 404
+  fetch.expect(/.*/, { status: 404, statusText: 'Not found' });
+</script>
 ```
